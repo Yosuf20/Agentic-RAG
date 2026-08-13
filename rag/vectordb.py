@@ -14,7 +14,6 @@ def get_retreivers(chunks, vector_store):
         search_type='mmr',
         search_kwargs={'k':4}
     )
-
     bm25_retriever = BM25Retriever.from_documents(chunks)
 
     return retriever, bm25_retriever

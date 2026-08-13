@@ -2,7 +2,6 @@ from langchain_core.tools import tool
 
 from rag.vectordb import hybrid_retrieve
 
-
 def create_pdf_search_tool(vector_retriever, bm25_retriever):
 
     @tool
