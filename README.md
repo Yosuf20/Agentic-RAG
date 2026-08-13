@@ -73,3 +73,5 @@ The system uses **LangGraph** for agent orchestration, **FAISS + BM25** for hybr
                            │
                            ▼
                      FINAL ANSWER
+
+                     ![alt text](<Multi Agent RAG.drawio.png>)
