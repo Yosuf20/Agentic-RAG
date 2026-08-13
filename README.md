@@ -45,6 +45,11 @@ The system uses **LangGraph** for agent orchestration, **FAISS + BM25** for hybr
 
 ## 🏗️ Architecture
 
+
+<p align="center">
+  <img src="AgentRag.png" width="900">
+</p>
+
 ```text
                          USER
                            │
@@ -73,8 +78,3 @@ The system uses **LangGraph** for agent orchestration, **FAISS + BM25** for hybr
                            │
                            ▼
                      FINAL ANSWER
-## System Architecture
-
-<p align="center">
-  <img src="AgentRag.png" width="900">
-</p>
