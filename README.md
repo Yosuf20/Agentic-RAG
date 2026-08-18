@@ -67,36 +67,3 @@ graph TD
     I --> M
     L --> M
 ```
-
-<p align="center">
-  <img src="AgentRag.png" width="900">
-</p>
-
-```text
-                         USER
-                           │
-                           ▼
-                    ┌─────────────┐
-                    │  SUPERVISOR │
-                    └──────┬──────┘
-                           │
-                 ┌─────────┴─────────┐
-                 │                   │
-                 ▼                   ▼
-            PDF AGENT             WEB AGENT
-                 │                   │
-                 ▼                   ▼
-          PDF Search Tool          Tavily
-                 │                   │
-          ┌──────┴──────┐            │
-          ▼             ▼            ▼
-        FAISS          BM25      Web Results
-          │             │            │
-          └──────┬──────┘            │
-                 │                   │
-                 └─────────┬─────────┘
-                           ▼
-                         LLM
-                           │
-                           ▼
-                     FINAL ANSWER
