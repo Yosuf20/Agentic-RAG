@@ -45,6 +45,28 @@ The system uses **LangGraph** for agent orchestration, **FAISS + BM25** for hybr
 
 ## 🏗️ Architecture
 
+```mermaid
+graph TD
+    A[User] --> B[Frontend]
+    B --> C[Query]
+    C --> D[Supervisor Agent]
+    D --> E[Pdf Agent]
+    D --> F[Web Agent]
+
+    E --> G[Tools: Pdf Search]
+    G --> H[MMR Retriever]
+    G --> I[BM25 Retriever]
+    H --> G
+    I --> G
+    H --> J[(VectorDB)]
+
+    F --> K[Tavily Search Tool]
+    K --> L[Web]
+
+    J --> M[END]
+    I --> M
+    L --> M
+```
 
 <p align="center">
   <img src="AgentRag.png" width="900">
