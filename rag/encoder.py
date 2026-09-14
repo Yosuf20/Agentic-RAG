@@ -3,7 +3,9 @@ import numpy as np
 from langchain_huggingface import HuggingFaceEmbeddings
 
 def get_embeddings():
+    print("Started Loading Sentence Transformer")
     embeddings = HuggingFaceEmbeddings(
         model_name="BAAI/bge-small-en-v1.5"
     )
+    print("Done loading model")
     return embeddings

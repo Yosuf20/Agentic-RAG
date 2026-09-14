@@ -26,7 +26,7 @@ def route_supervisor(state):
 
 
 def build_workflow(pdf_agent, web_agent):
-
+    print("Building Workflow")
     Graph_builder = StateGraph(State)
 
     Graph_builder.add_node("Pdf_Agent", pdf_agent)
@@ -47,6 +47,7 @@ def build_workflow(pdf_agent, web_agent):
 
     Graph_builder.add_edge("Pdf_Agent", END)
     Graph_builder.add_edge("Web_Agent", END)
+    print("Done building workflow")
 
     return Graph_builder.compile() 
 

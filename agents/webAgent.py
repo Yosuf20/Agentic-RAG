@@ -19,6 +19,7 @@ llm = ChatOllama(
 )
 
 def build_web_agent():
+    print("Building Web Agent....")
     tool = TavilySearch(max_results=2)
     tools = [tool]
 
