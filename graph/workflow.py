@@ -41,13 +41,15 @@ def build_workflow(pdf_agent, web_agent):
         {
             "Pdf_Agent" : "Pdf_Agent",
             "Web_Agent" : "Web_Agent",
+            "__end__" : END,
         }
     )
         
 
-    Graph_builder.add_edge("Pdf_Agent", END)
-    Graph_builder.add_edge("Web_Agent", END)
-    print("Done building workflow")
+    Graph_builder.add_edge("Pdf_Agent", "Supervisor")
+    Graph_builder.add_edge("Web_Agent", "Supervisor")
+
+    print("-------Done building workflow----------")
 
     return Graph_builder.compile() 
 
