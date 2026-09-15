@@ -13,14 +13,17 @@ class State(TypedDict):
 
 def route_supervisor(state):
 
-    if state.get("done"):
-        return END
+    if state.get("done", False):
+        print("Supervisor is Ending")
+        return "END"
     if state["next"] == "pdf":
         print("Called Pdf Agent")
         return "Pdf_Agent"
     elif state["next"] == "web":
         print("Called Web Agent")
         return "Web_Agent"
+
+    return "END"
 
     
 
@@ -41,7 +44,7 @@ def build_workflow(pdf_agent, web_agent):
         {
             "Pdf_Agent" : "Pdf_Agent",
             "Web_Agent" : "Web_Agent",
-            "__end__" : END,
+            "END" : END,
         }
     )
         
