@@ -15,7 +15,8 @@ class State(TypedDict):
     done : bool
 
 llm = ChatOllama(
-    model="qwen3:4b"
+    model="qwen3:4b",
+    thinking=False,
 )
 
 
@@ -35,6 +36,7 @@ You have two agents:
 2. web_agent:
    Use this when the user asks for current, external,
    or internet-based information.
+
 3. done:
    Use this when the user's request has been completely
    answered and no more agent work is required.
@@ -51,6 +53,7 @@ done
     response = llm.invoke(prompt)
 
     decision = response.content.strip().lower()
+    print("Decision made by supervisor Agent--->s",decision)
 
     if "pdf" in decision:
         return {
