@@ -3,12 +3,12 @@ from langchain_community.retrievers import BM25Retriever
 
 
 def vector_db(chunks, embeddings):
-    print("Creating Vector Store")
+    print("4.Creating Vector Store...")
     vector_store = FAISS.from_documents(
             embedding = embeddings,
             documents= chunks
         )
-    print("Done Creating Vector Store")
+    print("Done Creating Vector Store..")
     return vector_store
 
 def get_retreivers(chunks, vector_store):

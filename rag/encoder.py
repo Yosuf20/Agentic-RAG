@@ -3,7 +3,7 @@ import numpy as np
 from langchain_huggingface import HuggingFaceEmbeddings
 
 def get_embeddings():
-    print("Started Loading Sentence Transformer")
+    print("3.Started Loading Sentence Transformer")
     embeddings = HuggingFaceEmbeddings(
         model_name="BAAI/bge-small-en-v1.5"
     )
