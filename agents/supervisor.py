@@ -17,6 +17,7 @@ class State(TypedDict):
 llm = ChatOllama(
     model="qwen3:4b",
     thinking=False,
+    reasoning=False,
 )
 
 
@@ -44,7 +45,7 @@ You have two agents:
 User query:
 {query}
 
-Return ONLY one word:
+Return answer:
 pdf
 web
 done
@@ -53,7 +54,8 @@ done
     response = llm.invoke(prompt)
 
     decision = response.content.strip().lower()
-    print("Decision made by supervisor Agent--->s",decision)
+    raw_decision = response
+    print("Decision made by supervisor Agent--->",raw_decision)
 
     if "pdf" in decision:
         return {
@@ -63,7 +65,7 @@ done
 
     elif "web" in decision:
         return {
-            "next" : "webf",
+            "next" : "web",
             "done" : False
                 }
     else:
