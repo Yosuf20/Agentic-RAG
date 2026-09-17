@@ -25,7 +25,7 @@ def supervisor(state: State):
 
     query = state["messages"][-1].content
 
-    prompt = """
+    prompt = f"""/no_think
 You are a supervisor for a multi-agent system.
 
 You have two agents:
@@ -45,9 +45,9 @@ You have two agents:
 User query:
 {query}
 
-Return answer:
-pdf
-web
+Return answer only in one word:
+pdf,
+web,
 done
 """
 
