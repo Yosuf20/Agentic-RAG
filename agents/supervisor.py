@@ -11,6 +11,7 @@ from typing import Annotated
 
 class State(TypedDict):
     messages : Annotated[list, add_messages]
+    original_query = str
     next : str
     done : bool
 
@@ -23,7 +24,10 @@ llm = ChatOllama(
 
 def supervisor(state: State):
 
-    query = state["messages"][-1].content
+    if not state.get("original_query"):
+        original_query = state["messages"][-1].content
+    else:
+        original_query = state["original_query"]
 
     prompt = f"""/no_think
 You are a supervisor for a multi-agent system.
@@ -43,7 +47,10 @@ You have two agents:
    answered and no more agent work is required.
 
 User query:
-{query}
+{original_query}
+
+Previous Agent result:
+{state['messages']}
 
 Return answer only in one word:
 pdf,

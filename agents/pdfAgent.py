@@ -23,8 +23,6 @@ llm = ChatOllama(
 )
 
 
-
-
 def build_pdf_agent(vector_retriever, bm25_retriever):
     print("Building Pdf Agent....")
 
