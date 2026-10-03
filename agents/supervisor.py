@@ -1,17 +1,15 @@
-from langgraph.graph import StateGraph, START, END
 from langgraph.graph.message import add_messages
 from langgraph.prebuilt import tools_condition, ToolNode
-from langchain.chat_models import init_chat_model
-from langchain_core.tools import tool
 from langchain_ollama import ChatOllama
 from typing_extensions import TypedDict
 from typing import Annotated
+import re
 
 
 
 class State(TypedDict):
     messages : Annotated[list, add_messages]
-    original_query = str
+    original_query : str
     next : str
     done : bool
 
@@ -61,11 +59,6 @@ done
     response = llm.invoke(prompt)
 
 
-
-    decision = response.content.strip().lower()
-
-    import re
-
     decision_raw = response.content.strip().lower()
 
     # Strip out the <think>...</think> block entirely
@@ -74,18 +67,18 @@ done
     # Take only the last non-empty line — the model's real final answer
     lines = [l.strip() for l in cleaned.splitlines() if l.strip()]
     decision = lines[-1] if lines else cleaned
-    
+
     print("****")
     print(decision)
     print("****")
 
-    if "pdf" in decision:
+    if decision == "pdf":
         return {
             "next" : "pdf",
             "done" : False
         }
 
-    elif "web" in decision:
+    elif decision == "web":
         return {
             "next" : "web",
             "done" : False
