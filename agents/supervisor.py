@@ -60,9 +60,24 @@ done
 
     response = llm.invoke(prompt)
 
+
+
     decision = response.content.strip().lower()
-    raw_decision = response
-    print("Decision made by supervisor Agent--->",raw_decision)
+
+    import re
+
+    decision_raw = response.content.strip().lower()
+
+    # Strip out the <think>...</think> block entirely
+    cleaned = re.sub(r"<think>.*?</think>", "", decision_raw, flags=re.DOTALL).strip()
+
+    # Take only the last non-empty line — the model's real final answer
+    lines = [l.strip() for l in cleaned.splitlines() if l.strip()]
+    decision = lines[-1] if lines else cleaned
+    
+    print("****")
+    print(decision)
+    print("****")
 
     if "pdf" in decision:
         return {
