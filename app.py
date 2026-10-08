@@ -8,50 +8,6 @@ from graph.workflow import build_workflow
 import streamlit as st
 
 
-# path = r"C:\Users\Yosuf Jamal\OneDrive\Desktop\Intern Projects\encoder-decoder-paper.pdf"
-
-# def main():
-
-#     content = load_pdf(path)
-
-#     print(type(content))
-#     print("*"*50)
-#     print(len((content[0]).page_content))
-
-#     chunks = doc_spliiter(content=content)
-
-#     embeding_model = get_embeddings()
-
-#     vector_store = vector_db(chunks, embeding_model)
-
-#     vector_retriver , bm25retriever = get_retreivers(chunks, vector_store)
-
-#     pdf_agent = build_pdf_agent(
-#         vector_retriever=vector_retriver,
-#         bm25_retriever=bm25retriever)
-
-#     web_agent = build_web_agent()
-
-#     graph = build_workflow(pdf_agent, web_agent)
-
-#     query = input("Ask a Question: \n")
-
-#     result = graph.invoke({
-#         "messages" : [
-#             {
-#                 "role" : "user",
-#                 "content" : query
-#             }
-#         ]
-#     })
-
-#     print("\nResult:")
-#     print(result["messages"][-1].content)
-
-# if __name__ == "__main__":
-#     main()
-
-
 
 st.set_page_config(
     page_title="Multi-Agent RAG",
