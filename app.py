@@ -1,10 +1,7 @@
-from rag.loader import load_pdf
-from rag.spliiter import doc_spliiter
-from rag.encoder import get_embeddings
-from rag.vectordb import get_retreivers, vector_db
 from agents.pdfAgent import build_pdf_agent
 from agents.webAgent import build_web_agent
 from graph.workflow import build_workflow
+from rag.pdf_processing import process_pdf
 import streamlit as st
 
 
@@ -28,18 +25,15 @@ def initialize_system(uploaded_file):
     # -------------------------
     # Retrievers
     # -------------------------
+    pdf_info, retriever, bm25_retriever = process_pdf(path, filename)
 
-    vector_retriever, bm25_retriever = get_retreivers(
-        chunks,
-        vector_store
-    )
 
     # -------------------------
     # Agents
     # -------------------------
 
     pdf_agent = build_pdf_agent(
-        vector_retriever,
+        retriever,
         bm25_retriever
     )
 

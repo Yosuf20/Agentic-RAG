@@ -32,7 +32,7 @@ def _build_retriever(chunks):
     vectorstore = vector_db(chunks, embeddings)
     return get_retreivers(chunks, vectorstore)
 
-def process_pdf(llm, path, filename):
+def process_pdf(path, filename):
     docs = load_pdf(path)
     chunks = doc_spliiter(docs)
 
