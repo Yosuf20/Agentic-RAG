@@ -28,7 +28,7 @@ research paper, contract, etc.) and its main topic. Output only those sentences.
     return f"{filename}: {cleaned}"
 
 def _build_retriever(chunks):
-    embeddings = get_embeddings(chunks)
+    embeddings = get_embeddings()
     vectorstore = vector_db(chunks, embeddings)
     return get_retreivers(chunks, vectorstore)
 

@@ -10,6 +10,7 @@ import re
 class State(TypedDict):
     messages : Annotated[list, add_messages]
     original_query : str
+    pdf_info : str
     next : str
     done : bool
 
@@ -22,6 +23,13 @@ llm = ChatOllama(
 
 def supervisor(state: State):
 
+    pdf_info = state.get("pdf_info", "")
+    pdf_section = (
+        f"The user has uploaded a PDF: {pdf_info}"
+        if pdf_info
+        else "No PDF has been uploaded."
+    )
+
     if not state.get("original_query"):
         original_query = state["messages"][-1].content
     else:
@@ -30,6 +38,7 @@ def supervisor(state: State):
     prompt = f"""/no_think
 You are a supervisor for a multi-agent system.
 
+{pdf_section}
 You have two agents:
 
 1. pdf_agent:
@@ -60,6 +69,7 @@ done
 
 
     decision_raw = response.content.strip().lower()
+    print(decision_raw)
 
     # Strip out the <think>...</think> block entirely
     cleaned = re.sub(r"<think>.*?</think>", "", decision_raw, flags=re.DOTALL).strip()

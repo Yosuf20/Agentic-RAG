@@ -1,5 +1,3 @@
-from sentence_transformers import SentenceTransformer
-import numpy as np 
 from langchain_huggingface import HuggingFaceEmbeddings
 
 def get_embeddings():
