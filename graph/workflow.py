@@ -4,11 +4,7 @@ from typing_extensions import TypedDict
 from typing import Annotated
 from agents.supervisor import supervisor
 
-
-class State(TypedDict):
-    messages : Annotated[list, add_messages]
-    next : str
-    done : bool
+from graph.state import State
 
 def route_supervisor(state):
 

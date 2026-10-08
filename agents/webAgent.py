@@ -10,9 +10,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-
-class State(TypedDict):
-    messages : Annotated[list, add_messages]
+from graph.state import State
 
 llm = ChatOllama(
     model="qwen3:4b",

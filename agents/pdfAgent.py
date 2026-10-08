@@ -9,13 +9,7 @@ from rag.vectordb import hybrid_retrieve
 from tools.pdf_search import create_pdf_search_tool
 from typing import Annotated
 
-
-
-
-
-
-class State(TypedDict):
-    messages : Annotated[list, add_messages]
+from graph.state import State
 
 
 llm = ChatOllama(

@@ -5,14 +5,7 @@ from typing_extensions import TypedDict
 from typing import Annotated
 import re
 
-
-
-class State(TypedDict):
-    messages : Annotated[list, add_messages]
-    original_query : str
-    pdf_info : str
-    next : str
-    done : bool
+from graph.state import State
 
 llm = ChatOllama(
     model="qwen3:4b",
