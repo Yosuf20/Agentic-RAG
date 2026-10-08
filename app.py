@@ -15,6 +15,8 @@ st.set_page_config(
 
 def initialize_system(uploaded_file):
 
+    filename = uploaded_file.name
+
     # Save uploaded PDF temporarily
     pdf_path = "temp.pdf"
 
@@ -25,7 +27,7 @@ def initialize_system(uploaded_file):
     # -------------------------
     # Retrievers
     # -------------------------
-    pdf_info, retriever, bm25_retriever = process_pdf(path, filename)
+    pdf_info, retriever, bm25_retriever = process_pdf(pdf_path, filename)
 
 
     # -------------------------
@@ -48,7 +50,7 @@ def initialize_system(uploaded_file):
         web_agent
     )
 
-    return graph
+    return graph, pdf_info
 
 
 def main():
@@ -81,11 +83,12 @@ def main():
                     "Building RAG system..."
                 ):
 
-                    graph = initialize_system(
+                    graph, pdf_info = initialize_system(
                         uploaded_file
                     )
 
                     st.session_state.graph = graph
+                    st.session_state.pdf_info = pdf_info
                     st.session_state.initialized = True
 
                 st.success("System ready!")
@@ -131,7 +134,8 @@ def main():
                                 "role": "user",
                                 "content": query
                             }
-                        ]
+                        ],
+                        "pdf_info" : st.session_state.pdf_info,
                     }
                 )
 
