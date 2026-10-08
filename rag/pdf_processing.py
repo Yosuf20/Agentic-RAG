@@ -5,11 +5,7 @@ from rag.loader import load_pdf              # your real names here
 from rag.spliiter import doc_spliiter
 from rag.encoder import get_embeddings
 from rag.vectordb import vector_db, get_retreivers, hybrid_retrieve
-
-
-llm = ChatOllama(
-    model="qwen3:4b"
-)
+from config import llm
 
 def summarize_pdf(docs, filename: str) -> str:
     # first few pages are enough to identify the document type

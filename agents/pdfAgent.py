@@ -4,11 +4,7 @@ from langchain_ollama import ChatOllama
 from tools.pdf_search import create_pdf_search_tool
 
 from graph.state import State
-
-
-llm = ChatOllama(
-    model="qwen3:4b"
-)
+from config import llm
 
 
 def build_pdf_agent(vector_retriever, bm25_retriever):

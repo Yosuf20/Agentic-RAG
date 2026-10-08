@@ -7,10 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from graph.state import State
-
-llm = ChatOllama(
-    model="qwen3:4b",
-)
+from config import llm
 
 def build_web_agent():
     print("Building Web Agent....")

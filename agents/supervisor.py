@@ -2,12 +2,7 @@ from langchain_ollama import ChatOllama
 import re
 
 from graph.state import State
-
-llm = ChatOllama(
-    model="qwen3:4b",
-    thinking=False,
-    reasoning=False,
-)
+from config import router_llm
 
 def supervisor(state: State):
     print("pdf_info in state:", repr(state.get("pdf_info")))
@@ -54,7 +49,7 @@ web,
 done
 """
 
-    response = llm.invoke(prompt)
+    response = router_llm.invoke(prompt)
 
 
     decision_raw = response.content.strip().lower()
