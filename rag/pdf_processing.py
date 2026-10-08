@@ -1,4 +1,3 @@
-from langchain_ollama import ChatOllama
 from concurrent.futures import ThreadPoolExecutor
 import re
 from rag.loader import load_pdf              # your real names here
@@ -6,6 +5,7 @@ from rag.spliiter import doc_spliiter
 from rag.encoder import get_embeddings
 from rag.vectordb import vector_db, get_retreivers, hybrid_retrieve
 from config import llm
+import traceback
 
 def summarize_pdf(docs, filename: str) -> str:
     # first few pages are enough to identify the document type
@@ -39,6 +39,7 @@ def process_pdf(path, filename):
         try:
             pdf_info = summary_future.result()
         except Exception:
+            traceback.print_exc()
             pdf_info = f"{filename}: (summary unavailable)"
 
         retriever, bm25_retriever = retriever_future.result()

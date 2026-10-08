@@ -1,8 +1,7 @@
-from langchain_ollama import ChatOllama
 import re
-
 from graph.state import State
 from config import router_llm
+
 
 def supervisor(state: State):
     print("pdf_info in state:", repr(state.get("pdf_info")))
@@ -53,7 +52,7 @@ done
 
 
     decision_raw = response.content.strip().lower()
-    print(decision_raw)
+    #print(decision_raw)
 
     # Strip out the <think>...</think> block entirely
     cleaned = re.sub(r"<think>.*?</think>", "", decision_raw, flags=re.DOTALL).strip()
