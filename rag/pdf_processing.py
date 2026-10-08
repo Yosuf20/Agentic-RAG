@@ -4,7 +4,7 @@ import re
 from rag.loader import load_pdf              # your real names here
 from rag.spliiter import doc_spliiter
 from rag.encoder import get_embeddings
-from rag.vectordb import vector_db
+from rag.vectordb import vector_db, get_retreivers, hybrid_retrieve
 
 
 llm = ChatOllama(
@@ -27,10 +27,10 @@ research paper, contract, etc.) and its main topic. Output only those sentences.
     cleaned = re.sub(r"<think>.*?</think>", "", raw, flags=re.DOTALL).strip()
     return f"{filename}: {cleaned}"
 
-def build_retriver(chunks):
+def _build_retriever(chunks):
     embeddings = get_embeddings(chunks)
     vectorstore = vector_db(chunks, embeddings)
-    return vectorstore.as_retriever()
+    return get_retreivers(chunks, vectorstore)
 
 def process_pdf(llm, path, filename):
     docs = load_pdf(path)
@@ -38,13 +38,13 @@ def process_pdf(llm, path, filename):
 
     with ThreadPoolExecutor(max_workers=2) as pool:
         summary_future = pool.submit(summarize_pdf, llm, docs, filename)
-        store_future = pool.submit(build_vector_store, chunks)
+        retriever_future = pool.submit(_build_retriever, chunks)
 
         try:
             pdf_info = summary_future.result()
         except Exception:
             pdf_info = f"{filename}: (summary unavailable)"
 
-        vectorstore = store_future.result()
+        retriever, bm25_retriever = retriever_future.result()
 
-    return pdf_info, vectorstore.as_retriever()
+    return pdf_info, retriever, bm25_retriever
