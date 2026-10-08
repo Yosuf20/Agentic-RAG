@@ -27,10 +27,14 @@ research paper, contract, etc.) and its main topic. Output only those sentences.
     cleaned = re.sub(r"<think>.*?</think>", "", raw, flags=re.DOTALL).strip()
     return f"{filename}: {cleaned}"
 
+def build_retriver(chunks):
+    embeddings = get_embeddings(chunks)
+    vectorstore = vector_db(chunks, embeddings)
+    return vectorstore.as_retriever()
 
 def process_pdf(llm, path, filename):
     docs = load_pdf(path)
-    chunks = create_chunks(docs)
+    chunks = doc_spliiter(docs)
 
     with ThreadPoolExecutor(max_workers=2) as pool:
         summary_future = pool.submit(summarize_pdf, llm, docs, filename)

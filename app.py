@@ -23,33 +23,7 @@ def initialize_system(uploaded_file):
 
     with open(pdf_path, "wb") as f:
         f.write(uploaded_file.getbuffer())
-
-    # -------------------------
-    # PDF Loading
-    # -------------------------
-
-    content = load_pdf(pdf_path)
-
-    # -------------------------
-    # Splitting
-    # -------------------------
-
-    chunks = doc_spliiter(content)
-
-    # -------------------------
-    # Embeddings
-    # -------------------------
-
-    embeddings = get_embeddings()
-
-    # -------------------------
-    # Vector Database
-    # -------------------------
-
-    vector_store = vector_db(
-        chunks,
-        embeddings 
-    )
+    
 
     # -------------------------
     # Retrievers
