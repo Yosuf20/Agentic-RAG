@@ -1,8 +1,4 @@
-from langgraph.graph.message import add_messages
-from langgraph.prebuilt import tools_condition, ToolNode
 from langchain_ollama import ChatOllama
-from typing_extensions import TypedDict
-from typing import Annotated
 import re
 
 from graph.state import State
@@ -13,8 +9,8 @@ llm = ChatOllama(
     reasoning=False,
 )
 
-
 def supervisor(state: State):
+    print("pdf_info in state:", repr(state.get("pdf_info")))
 
     pdf_info = state.get("pdf_info", "")
     pdf_section = (
