@@ -4,10 +4,10 @@ from laya import Router
 from dotenv import load_dotenv
 load_dotenv()
 import os
-from groq import Groq
+
 from langchain_groq import ChatGroq
-
-
+llm = ChatGroq(model= "openai/gpt-oss-20b", temperature=0)
+router_llm = llm
 
 
 
@@ -20,12 +20,6 @@ CHUNK_SIZE = 1000
 CHUNK_OVERLAP = 200
 RETRIEVER_K = 4
 
-# Shared LLM instances
-
-client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-llm = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
-router_llm = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
-
+# # Shared LLM instances
 # llm = ChatOllama(model=AGENT_MODEL, reasoning=False)
-
 # router_llm = Router(preload=True)
