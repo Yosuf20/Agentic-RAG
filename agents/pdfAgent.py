@@ -1,6 +1,5 @@
 from langgraph.graph import StateGraph, START, END
 from langgraph.prebuilt import tools_condition, ToolNode
-from langchain_ollama import ChatOllama
 from tools.pdf_search import create_pdf_search_tool
 
 from graph.state import State
