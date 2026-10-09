@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Multi-Agent RAG — Ask Your PDF or the Web</title>
+  <meta name="description" content="A multi-agent RAG system that routes your questions to a PDF Agent or Web Agent — powered by LangGraph, FAISS, BM25, Tavily, and Qwen3 running locally." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- =====================================================
+       NAV
+  ====================================================== -->
+  <header class="nav" role="banner">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="#" class="nav-logo" aria-label="Multi-Agent RAG home">
+          <span class="nav-logo-icon" aria-hidden="true">🤖</span>
+          <span class="nav-logo-text">AgentRAG</span>
+        </a>
+
+        <nav aria-label="Main navigation">
+          <ul class="nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#preview">Preview</a></li>
+            <li><a href="#tech">Tech Stack</a></li>
+            <li>
+              <a href="http://localhost:8501" id="nav-launch-btn" class="nav-cta" target="_blank" rel="noopener">
+                Launch App ↗
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+    <section class="hero" aria-labelledby="hero-heading">
+      <div class="container">
+        <div class="hero-grid">
+
+          <!-- Left: Text -->
+          <div>
+            <div class="hero-badge" aria-label="Badge: Powered by Local LLM">
+              ✨ Powered by Local Qwen3:4B
+            </div>
+
+            <h1 class="hero-title" id="hero-heading">
+              Ask your
+              <span class="accent-word">PDF</span>
+              or the
+              <span class="secondary-word">Web</span>
+              — Let agents decide<span style="display:inline-block;transform:rotate(-10deg);color:var(--accent)">!</span>
+            </h1>
+
+            <p class="hero-subtitle">
+              Upload a document and chat. A Supervisor Agent routes each query to the
+              <strong>PDF Agent</strong> (FAISS + BM25 hybrid retrieval) or the
+              <strong>Web Agent</strong> (Tavily search) — automatically.
+            </p>
+
+            <div class="hero-actions">
+              <a href="http://localhost:8501" id="hero-launch-btn" class="btn btn-primary" target="_blank" rel="noopener">
+                🚀 Launch App
+              </a>
+              <a href="#how-it-works" class="btn btn-secondary" id="hero-learn-btn">
+                How it works ↓
+              </a>
+
+              <!-- Dashed arrow decoration (desktop only) -->
+              <svg class="hero-arrow" width="60" height="50" viewBox="0 0 60 50" fill="none" aria-hidden="true">
+                <path d="M5 45 C 15 30, 40 20, 55 5" stroke="#ff4d4d" stroke-width="2.5" stroke-dasharray="5 4" fill="none"/>
+                <path d="M50 3 L55 5 L52 10" stroke="#ff4d4d" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Right: Illustration -->
+          <div class="hero-img-wrap">
+            <img
+              src="assets/hero.jpg"
+              alt="Sketch of a robot reading a PDF document next to a globe — representing the PDF and Web agents"
+              class="hero-img"
+              width="440"
+              height="440"
+              loading="eager"
+            />
+            <div class="hero-bounce" aria-hidden="true">🔍</div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         STATS
+    ====================================================== -->
+    <section class="stats-bar" aria-label="Key stats">
+      <div class="container">
+        <div class="stats-grid">
+
+          <div class="stat-item">
+            <div class="stat-bubble">
+              <span class="stat-num">2</span>
+              <span class="stat-label">Agents</span>
+            </div>
+            <p class="stat-desc">PDF + Web</p>
+          </div>
+
+          <div class="stat-item">
+            <div class="stat-bubble">
+              <span class="stat-num">3</span>
+              <span class="stat-label">Models</span>
+            </div>
+            <p class="stat-desc">FAISS · BM25 · Tavily</p>
+          </div>
+
+          <div class="stat-item">
+            <div class="stat-bubble">
+              <span class="stat-num">100%</span>
+              <span class="stat-label">Local LLM</span>
+            </div>
+            <p class="stat-desc">Runs on your machine</p>
+          </div>
+
+          <div class="stat-item">
+            <div class="stat-bubble">
+              <span class="stat-num">∞</span>
+              <span class="stat-label">Queries</span>
+            </div>
+            <p class="stat-desc">No rate limits</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         FEATURES
+    ====================================================== -->
+    <section class="features" id="features" aria-labelledby="features-heading">
+      <div class="container">
+        <div class="section-tag">📌 Features</div>
+        <h2 class="section-heading" id="features-heading">Everything you need to query smarter</h2>
+        <p class="section-sub">Six powerful capabilities under one roof — all running locally.</p>
+
+        <div class="features-grid">
+
+          <!-- Card 1: tape -->
+          <article class="feature-card" id="feature-pdf">
+            <div class="tape" aria-hidden="true"></div>
+            <div class="feature-icon-wrap" aria-hidden="true">📄</div>
+            <h3 class="feature-title">PDF Question Answering</h3>
+            <p class="feature-desc">
+              Upload any PDF and ask natural-language questions.
+              Documents are chunked intelligently for precise retrieval.
+            </p>
+          </article>
+
+          <!-- Card 2: tack, postit -->
+          <article class="feature-card postit-card" id="feature-hybrid">
+            <div class="tack" aria-hidden="true"></div>
+            <div class="feature-icon-wrap" aria-hidden="true">🔎</div>
+            <h3 class="feature-title">Hybrid Retrieval</h3>
+            <p class="feature-desc">
+              Combines <strong>FAISS</strong> vector similarity and
+              <strong>BM25</strong> keyword search for best-of-both retrieval quality.
+            </p>
+          </article>
+
+          <!-- Card 3: tape -->
+          <article class="feature-card" id="feature-web">
+            <div class="tape" aria-hidden="true"></div>
+            <div class="feature-icon-wrap" aria-hidden="true">🌐</div>
+            <h3 class="feature-title">Web Search Agent</h3>
+            <p class="feature-desc">
+              Queries requiring current or external information are routed to
+              <strong>Tavily</strong> for live web search.
+            </p>
+          </article>
+
+          <!-- Card 4: tack -->
+          <article class="feature-card" id="feature-supervisor">
+            <div class="tack" aria-hidden="true"></div>
+            <div class="feature-icon-wrap" aria-hidden="true">🧠</div>
+            <h3 class="feature-title">Supervisor Agent</h3>
+            <p class="feature-desc">
+              A routing agent analyses each query and delegates to the right specialist.
+              Supports multi-hop ReAct-style loops.
+            </p>
+          </article>
+
+          <!-- Card 5: tape, postit -->
+          <article class="feature-card postit-card" id="feature-langgraph">
+            <div class="tape" aria-hidden="true"></div>
+            <div class="feature-icon-wrap" aria-hidden="true">🔄</div>
+            <h3 class="feature-title">LangGraph Workflow</h3>
+            <p class="feature-desc">
+              Agents communicate through a shared graph state — enabling agent → supervisor → agent loops with full message history.
+            </p>
+          </article>
+
+          <!-- Card 6: tack -->
+          <article class="feature-card" id="feature-local">
+            <div class="tack" aria-hidden="true"></div>
+            <div class="feature-icon-wrap" aria-hidden="true">🏠</div>
+            <h3 class="feature-title">Local LLM via Ollama</h3>
+            <p class="feature-desc">
+              All inference runs on your machine using <strong>Qwen3:4B</strong> through Ollama.
+              Privacy-first, no API keys for LLM.
+            </p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         HOW IT WORKS
+    ====================================================== -->
+    <section class="how-it-works" id="how-it-works" aria-labelledby="hiw-heading">
+      <div class="container">
+        <div class="section-tag">⚙️ Process</div>
+        <h2 class="section-heading" id="hiw-heading">How it works in 3 steps</h2>
+        <p class="section-sub">From PDF upload to intelligent answer — all automated.</p>
+
+        <div style="position:relative;">
+
+          <!-- SVG squiggle connectors (desktop) -->
+          <svg class="steps-connector" style="position:absolute;top:38px;left:calc(33.33% + 24px);width:calc(33.33% - 48px);height:28px;overflow:visible;z-index:5;" aria-hidden="true">
+            <path d="M0,14 C20,2 40,26 60,14 C80,2 100,26 120,14" stroke="#ff4d4d" stroke-width="2.5" fill="none" stroke-dasharray="5 3" />
+          </svg>
+          <svg class="steps-connector" style="position:absolute;top:38px;left:calc(66.66% + 24px);width:calc(33.33% - 48px);height:28px;overflow:visible;z-index:5;" aria-hidden="true">
+            <path d="M0,14 C20,2 40,26 60,14 C80,2 100,26 120,14" stroke="#2d5da1" stroke-width="2.5" fill="none" stroke-dasharray="5 3" />
+          </svg>
+
+          <div class="steps-grid">
+
+            <article class="step-card" id="step-1">
+              <div class="step-num">1</div>
+              <div class="step-icon" aria-hidden="true">📤</div>
+              <h3 class="step-title">Upload & Process</h3>
+              <p class="step-desc">
+                Drop your PDF. The system chunks, embeds it into FAISS, and indexes it with BM25 for hybrid retrieval.
+              </p>
+            </article>
+
+            <article class="step-card" id="step-2">
+              <div class="step-num">2</div>
+              <div class="step-icon" aria-hidden="true">🤔</div>
+              <h3 class="step-title">Supervisor Routes</h3>
+              <p class="step-desc">
+                Your question hits the Supervisor Agent. It decides: does this need the PDF Agent or the Web Agent?
+              </p>
+            </article>
+
+            <article class="step-card" id="step-3">
+              <div class="step-num">3</div>
+              <div class="step-icon" aria-hidden="true">💬</div>
+              <h3 class="step-title">Answer Delivered</h3>
+              <p class="step-desc">
+                The specialist agent retrieves context and Qwen3 synthesises a precise, cited answer — streamed back to you.
+              </p>
+            </article>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         APP PREVIEW (interactive chat demo)
+    ====================================================== -->
+    <section class="app-preview" id="preview" aria-labelledby="preview-heading">
+      <div class="container">
+        <div class="section-tag">🖥️ Interface</div>
+        <h2 class="section-heading" id="preview-heading">A sneak peek at the interface</h2>
+        <p class="section-sub">Simulated demo — shows a real conversation flow.</p>
+
+        <div class="app-window" role="img" aria-label="App interface preview showing sidebar and chat area">
+
+          <!-- Titlebar -->
+          <div class="app-titlebar" aria-hidden="true">
+            <div class="titlebar-dot red"></div>
+            <div class="titlebar-dot yellow"></div>
+            <div class="titlebar-dot green"></div>
+            <span class="titlebar-label">🤖 AgentRAG — Multi-Agent RAG</span>
+          </div>
+
+          <!-- Body -->
+          <div class="app-body">
+
+            <!-- Sidebar -->
+            <aside class="app-sidebar" aria-label="Sidebar">
+              <div class="sidebar-heading">📄 Upload PDF</div>
+
+              <div class="upload-zone" id="demo-upload-zone" role="button" tabindex="0" aria-label="Upload PDF demo zone">
+                <span class="upload-zone-icon">📂</span>
+                <span>Drop PDF here<br/>or click to browse</span>
+              </div>
+
+              <div style="margin-top:0.5rem;">
+                <p style="font-size:0.8rem;opacity:0.7;margin-bottom:0.5rem;font-family:var(--font-heading);">Active Agents</p>
+                <div class="agent-badge active" id="agent-pdf-badge">
+                  <div class="agent-dot"></div> PDF Agent
+                </div>
+                <div class="agent-badge" id="agent-web-badge" style="margin-top:0.5rem;">
+                  <div class="agent-dot"></div> Web Agent
+                </div>
+              </div>
+            </aside>
+
+            <!-- Chat -->
+            <div class="chat-area">
+              <div class="chat-messages" id="demo-chat-messages" aria-live="polite" aria-label="Demo chat messages">
+
+                <!-- Static demo messages -->
+                <div class="msg">
+                  <div class="msg-avatar" aria-hidden="true">🤖</div>
+                  <div>
+                    <div class="msg-bubble">
+                      System ready! I've processed your PDF and I'm connected to web search. Ask me anything ✍️
+                    </div>
+                  </div>
+                </div>
+
+                <div class="msg user-msg">
+                  <div class="msg-avatar" aria-hidden="true">👤</div>
+                  <div>
+                    <div class="msg-bubble">What is the main topic of the uploaded document?</div>
+                  </div>
+                </div>
+
+                <div class="msg" id="demo-reply-1">
+                  <div class="msg-avatar" aria-hidden="true">🤖</div>
+                  <div>
+                    <div class="msg-bubble">
+                      Based on the document, the main topic is <strong>Retrieval-Augmented Generation (RAG)</strong> architectures and how they combine dense and sparse retrieval techniques for improved QA performance.
+                    </div>
+                    <div class="msg-agent-tag">📄 PDF Agent — FAISS + BM25</div>
+                  </div>
+                </div>
+
+                <div class="msg user-msg">
+                  <div class="msg-avatar" aria-hidden="true">👤</div>
+                  <div>
+                    <div class="msg-bubble">What's the latest news about LangGraph?</div>
+                  </div>
+                </div>
+
+                <div class="msg" id="demo-reply-2">
+                  <div class="msg-avatar" aria-hidden="true">🤖</div>
+                  <div>
+                    <div class="msg-bubble" id="typing-bubble">
+                      <span class="typing-dot"></span>
+                      <span class="typing-dot"></span>
+                      <span class="typing-dot"></span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Chat input -->
+              <div class="chat-input-area">
+                <input
+                  id="demo-chat-input"
+                  class="input"
+                  type="text"
+                  placeholder="Ask something about the PDF or the web..."
+                  aria-label="Demo chat input"
+                  autocomplete="off"
+                />
+                <button class="btn btn-primary btn-icon btn-sm" id="demo-send-btn" aria-label="Send message">
+                  ➤
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         TECH STACK
+    ====================================================== -->
+    <section class="tech-stack" id="tech" aria-labelledby="tech-heading">
+      <div class="container" style="text-align:center;">
+        <div class="section-tag">🛠️ Stack</div>
+        <h2 class="section-heading" id="tech-heading">Built with the best open-source tools</h2>
+        <p class="section-sub">All production-grade, all battle-tested.</p>
+
+        <div class="tech-pills" role="list" aria-label="Technology stack">
+          <div class="tech-pill" role="listitem" id="tech-langgraph">🔗 LangGraph</div>
+          <div class="tech-pill" role="listitem" id="tech-faiss">🗄️ FAISS</div>
+          <div class="tech-pill" role="listitem" id="tech-bm25">🔤 BM25</div>
+          <div class="tech-pill" role="listitem" id="tech-tavily">🌐 Tavily</div>
+          <div class="tech-pill" role="listitem" id="tech-ollama">🦙 Ollama</div>
+          <div class="tech-pill" role="listitem" id="tech-qwen">🧠 Qwen3:4B</div>
+          <div class="tech-pill" role="listitem" id="tech-langchain">⛓️ LangChain</div>
+          <div class="tech-pill" role="listitem" id="tech-streamlit">🎈 Streamlit</div>
+          <div class="tech-pill" role="listitem" id="tech-python">🐍 Python</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         CTA
+    ====================================================== -->
+    <section class="cta-section" id="cta" aria-labelledby="cta-heading">
+      <div class="container" style="display:flex;justify-content:center;">
+        <div class="cta-box">
+          <div class="cta-scribble" aria-hidden="true">✏️</div>
+          <h2 id="cta-heading">Ready to query smarter?</h2>
+          <p>
+            Launch the Streamlit app, upload your PDF, and start asking — the agents handle the rest.
+            No API keys for LLM. No rate limits. 100% local.
+          </p>
+          <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;">
+            <a href="http://localhost:8501" id="cta-launch-btn" class="btn btn-primary" target="_blank" rel="noopener">
+              🚀 Launch Streamlit App
+            </a>
+            <a href="https://github.com" id="cta-github-btn" class="btn btn-secondary" target="_blank" rel="noopener">
+              ⭐ GitHub
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =====================================================
+       FOOTER
+  ====================================================== -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-inner">
+        <a href="#" class="footer-brand">🤖 AgentRAG</a>
+
+        <ul class="footer-links" aria-label="Footer navigation">
+          <li><a href="#features">Features</a></li>
+          <li><a href="#how-it-works">How It Works</a></li>
+          <li><a href="#preview">Preview</a></li>
+          <li><a href="#tech">Tech</a></li>
+          <li><a href="http://localhost:8501" target="_blank" rel="noopener">Launch App ↗</a></li>
+        </ul>
+
+        <p class="footer-copy">Built with ❤️ using LangGraph + Qwen3</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
