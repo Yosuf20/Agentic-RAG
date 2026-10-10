@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chat — AgentRAG</title>
+  <meta name="description" content="Chat with your PDF or search the web using the Multi-Agent RAG system." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="chat.css" />
+</head>
+<body class="chat-page">
+
+  <!-- =====================================================
+       NAV  (identical to landing page)
+  ====================================================== -->
+  <header class="nav" role="banner">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="index.html" class="nav-logo" aria-label="AgentRAG home">
+          <span class="nav-logo-icon" aria-hidden="true">🤖</span>
+          <span class="nav-logo-text">AgentRAG</span>
+        </a>
+
+        <nav aria-label="Main navigation">
+          <ul class="nav-links">
+            <li><a href="index.html#features">Features</a></li>
+            <li><a href="index.html#how-it-works">How It Works</a></li>
+            <li><a href="index.html#tech">Tech Stack</a></li>
+            <li>
+              <a href="chat.html" id="nav-chat-btn" class="nav-cta chat-nav-cta" aria-current="page">
+                💬 Chat
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- =====================================================
+       MAIN LAYOUT
+  ====================================================== -->
+  <main class="chat-layout">
+
+    <!-- ── LEFT SIDEBAR ─────────────────────────────── -->
+    <aside class="chat-sidebar" aria-label="Document sidebar">
+
+      <div class="sidebar-title">
+        📄 Your Document
+      </div>
+
+      <!-- Upload drop zone -->
+      <div
+        class="upload-area"
+        id="upload-area"
+        role="button"
+        tabindex="0"
+        aria-label="Upload a PDF file"
+        aria-describedby="upload-hint"
+      >
+        <input
+          type="file"
+          id="pdf-file-input"
+          accept=".pdf"
+          aria-hidden="true"
+          tabindex="-1"
+        />
+        <span class="upload-area-icon" aria-hidden="true" id="upload-icon">📂</span>
+        <p class="upload-area-text" id="upload-text">
+          Drop a PDF here<br />or click to browse
+        </p>
+        <span class="upload-area-hint" id="upload-hint">Only .pdf files · Max 50 MB</span>
+      </div>
+
+      <!-- Progress indicator (shown while pipeline builds) -->
+      <div class="upload-progress" id="upload-progress" aria-live="polite" aria-label="Upload progress">
+        <div class="progress-label">
+          <span class="progress-spinner" aria-hidden="true"></span>
+          <span id="progress-text">Processing PDF…</span>
+        </div>
+        <div class="progress-bar-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-bar-track">
+          <div class="progress-bar-fill" id="progress-bar-fill"></div>
+        </div>
+      </div>
+
+      <!-- Document card (shown after successful upload) -->
+      <div class="doc-card" id="doc-card" aria-label="Uploaded document info">
+        <div class="doc-card-tape" aria-hidden="true"></div>
+        <p class="doc-card-name" id="doc-card-name">document.pdf</p>
+        <p class="doc-card-info" id="doc-card-info">Loading summary…</p>
+        <button class="doc-card-reset" id="doc-card-reset" aria-label="Upload a different PDF">
+          ↩ Upload a different PDF
+        </button>
+      </div>
+
+      <!-- Agent status badges -->
+      <div class="agent-status-section" aria-label="Active agents">
+        <p class="agent-status-label">Active Agents</p>
+        <div class="agent-badge" id="badge-pdf" aria-live="polite">
+          <div class="agent-dot" aria-hidden="true"></div>
+          📄 PDF Agent
+        </div>
+        <div class="agent-badge" id="badge-web" aria-live="polite">
+          <div class="agent-dot" aria-hidden="true"></div>
+          🌐 Web Agent
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- ── CHAT PANEL ────────────────────────────────── -->
+    <section class="chat-panel" aria-labelledby="chat-panel-heading">
+
+      <!-- Panel header -->
+      <div class="chat-panel-header">
+        <h1 class="chat-panel-title" id="chat-panel-heading">
+          <span aria-hidden="true">💬</span> Conversation
+        </h1>
+        <div class="chat-panel-actions">
+          <button
+            class="btn btn-secondary btn-sm"
+            id="clear-chat-btn"
+            aria-label="Clear conversation history"
+            title="Clear chat"
+          >
+            🗑 Clear
+          </button>
+        </div>
+      </div>
+
+      <!-- Messages -->
+      <div
+        class="messages-area"
+        id="messages-area"
+        role="log"
+        aria-live="polite"
+        aria-label="Conversation messages"
+      >
+
+        <!-- Empty state (hidden once messages appear) -->
+        <div class="empty-state" id="empty-state">
+          <span class="empty-state-icon" aria-hidden="true">🤖</span>
+          <div>
+            <p class="empty-state-title">Ready to chat!</p>
+            <p class="empty-state-sub">Upload a PDF on the left, then ask anything about it — or ask the web agent for live info.</p>
+          </div>
+
+          <div class="example-prompts" role="list" aria-label="Example prompts">
+            <button class="example-prompt" role="listitem" id="prompt-1" data-prompt="What is the main topic of this document?">
+              📄 What is the main topic of this document?
+            </button>
+            <button class="example-prompt" role="listitem" id="prompt-2" data-prompt="Summarise the key points in 3 bullet points.">
+              📝 Summarise the key points in 3 bullet points.
+            </button>
+            <button class="example-prompt" role="listitem" id="prompt-3" data-prompt="What is the latest news about LangGraph?">
+              🌐 What is the latest news about LangGraph?
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Upload hint below messages when no PDF loaded -->
+      <p class="input-locked-hint" id="input-locked-hint">
+        ← Upload a PDF first to enable the chat
+      </p>
+
+      <!-- Input area -->
+      <div class="input-area">
+        <textarea
+          id="chat-input"
+          class="chat-textarea"
+          placeholder="Ask about the PDF or search the web…"
+          rows="1"
+          disabled
+          aria-label="Message input"
+          aria-describedby="input-locked-hint"
+          autocomplete="off"
+        ></textarea>
+        <button
+          class="send-btn"
+          id="send-btn"
+          aria-label="Send message"
+          disabled
+        >➤</button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Toast notification -->
+  <div class="toast" id="toast" role="alert" aria-live="assertive" aria-atomic="true"></div>
+
+  <script src="chat.js"></script>
+</body>
+</html>
