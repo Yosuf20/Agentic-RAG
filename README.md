@@ -43,6 +43,71 @@ The system uses **LangGraph** for agent orchestration, **FAISS + BM25** for hybr
 
 ---
 
+## ⚙️ Setup
+
+The commands below are for Windows PowerShell.
+
+### 1. Create and activate the virtual environment
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+```
+
+If the virtual environment already exists, activate it and install any missing
+dependencies with the same `pip install` command.
+
+### 2. Configure API keys
+
+The current configuration uses Groq for the chat model and Tavily for web
+search. Create a `.env` file in the project root:
+
+```env
+GROQ_API_KEY=your-groq-api-key
+TAVILY_API_KEY=your-tavily-api-key
+```
+
+Do not commit `.env` or expose these keys publicly.
+
+---
+
+## ▶️ Run the application
+
+There are two available interfaces.
+
+### Custom frontend
+
+Start the FastAPI backend in one PowerShell terminal:
+
+```powershell
+.\.venv\Scripts\python.exe -m uvicorn api:app --reload --port 8000
+```
+
+Check that the backend is running at
+[`http://localhost:8000/health`](http://localhost:8000/health).
+
+Start the frontend in a second PowerShell terminal:
+
+```powershell
+.\.venv\Scripts\python.exe -m http.server 5500 --directory frontend
+```
+
+Open [`http://localhost:5500/chat.html`](http://localhost:5500/chat.html),
+upload a PDF, and start chatting.
+
+### Streamlit interface
+
+To run the original Streamlit interface:
+
+```powershell
+.\.venv\Scripts\python.exe -m streamlit run app.py
+```
+
+Open [`http://localhost:8501`](http://localhost:8501) in your browser.
+
+---
+
 ## 🏗️ Architecture
 
 ```mermaid
