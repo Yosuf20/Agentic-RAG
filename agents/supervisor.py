@@ -92,7 +92,7 @@ done
 
 
     decision_raw = response.content.strip().lower()
-    #print(decision_raw)
+    print("This is Raw decision of Supervisor\n", decision_raw)
 
     # Strip out the <think>...</think> block entirely
     cleaned = re.sub(r"<think>.*?</think>", "", decision_raw, flags=re.DOTALL).strip()
