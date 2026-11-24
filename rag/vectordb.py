@@ -1,5 +1,6 @@
 from langchain_community.vectorstores import FAISS
 from langchain_community.retrievers import BM25Retriever
+from config import RETRIEVER_K
 
 
 def vector_db(chunks, embeddings):
@@ -15,7 +16,7 @@ def get_retreivers(chunks, vector_store):
     print("Making Retriver")
     retriever = vector_store.as_retriever(
         search_type='mmr',
-        search_kwargs={'k':4}
+        search_kwargs={'k':RETRIEVER_K}
     )
     bm25_retriever = BM25Retriever.from_documents(chunks)
 
