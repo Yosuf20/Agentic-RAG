@@ -1,9 +1,6 @@
 # config.py
-from langchain_ollama import ChatOllama
-from laya import Router
 from dotenv import load_dotenv
 load_dotenv()
-import os
 
 from langchain_groq import ChatGroq
 llm = ChatGroq(model= "openai/gpt-oss-20b", temperature=0)
