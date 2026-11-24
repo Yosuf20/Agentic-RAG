@@ -33,7 +33,7 @@ def process_pdf(path, filename):
     chunks = doc_spliiter(docs)
 
     with ThreadPoolExecutor(max_workers=2) as pool:
-        summary_future = pool.submit(summarize_pdf, llm, docs, filename)
+        summary_future = pool.submit(summarize_pdf, docs, filename)
         retriever_future = pool.submit(_build_retriever, chunks)
 
         try:
